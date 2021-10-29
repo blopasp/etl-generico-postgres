@@ -1,0 +1,6 @@
+{
+    "host": "localhost",
+    "database": "bpc",
+    "user": "postgres",
+    "pwd":"admin"
+}
