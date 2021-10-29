@@ -1,6 +1,6 @@
 {
     "host": "localhost",
-    "database": "bpc",
+    "database": "receitas_gov",
     "user": "postgres",
     "pwd":"admin"
 }
