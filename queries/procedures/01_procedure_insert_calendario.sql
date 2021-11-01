@@ -5,7 +5,7 @@ declare
 	data1 date;
 	data2 date;
 begin
-	truncate calendario restart identity;
+	truncate calendario restart identity cascade;
 
 	data1 := (select current_date - interval'20000 day');
 	data2 := (select current_date + interval'5000 day');

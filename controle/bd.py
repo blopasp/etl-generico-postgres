@@ -29,18 +29,19 @@ class BD:
         return self.__conn
 
     def query(self, script:str):
-        with self.conn.cursor() as cursor:
+        self.__conn = self.connect()
+        with self.__conn.cursor() as cursor:
             cursor.execute(script)
             
-        self.conn.commit()
+        self.__conn.commit()
     
     def get_results_query(self, query):
 
-        with self.conn.cursor(cursor_factory=extras.DictCursor) as cursor:
+        with self.__conn.cursor(cursor_factory=extras.DictCursor) as cursor:
             cursor.execute(query)
             results = cursor.fetchall()
             colunas = [x[0] for x in cursor.description]
-        self.conn.commit()
+        self.__conn.commit()
         
         results_dict = {}
 
@@ -54,34 +55,35 @@ class BD:
         return results_dict
 
     def insert_df_pandas(self, df, tabela):
-        self.constraints_on()
+        self.constraints_off()
 
         insert = f'''
             INSERT INTO {tabela} ({", ".join(tuple(df.columns))}) VALUES ({", ".join(['%s']*len(df.columns))})
         '''    
         
-        with self.conn.cursor() as cursor:
+        with self.__conn.cursor() as cursor:
             cursor.executemany(insert, [tuple(x) for x in df.values])
-        self.conn.commit()
+        self.__conn.commit()
 
         print(f'Processo de insercao na tabela {tabela} concluido.')
-        self.constraints_off()
-
-    def insert_list(self, lista:list, colunas:list, tabela:str):
         self.constraints_on()
 
+    def insert_list(self, lista:list, colunas:list, tabela:str):
+        self.constraints_off()
+
         insert = f'''
-            INSERT INTO {tabela} ({", ".join(colunas)}) VALUES ({", ".join(['%s']*len(lista))})
+            INSERT INTO {tabela} ({", ".join(colunas)}) VALUES ({", ".join(['%s']*len(colunas))})
         '''
 
-        self.conn = self.connect()
+        self.__conn = self.connect()
         
-        with self.conn.cursor() as cursor:
+        with self.__conn.cursor() as cursor:
             cursor.executemany(insert, [tuple(x) for x in lista])
-        self.conn.commit()
+        self.__conn.commit()
 
         print(f'Processo de insercao na tabela {tabela} concluido.')
-        self.constraints_off()
+        
+        self.constraints_on()
         
     @staticmethod
     def procurar_padrao(string, padrao):
@@ -104,10 +106,10 @@ class BD:
     def return_tables(self):
         return self.get_results_query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
 
-    def constraints_on(self):
-        self.query('set session_replication_role to replica')
-
     def constraints_off(self):
+        self.query('set session_replication_role to replica;')
+
+    def constraints_on(self):
         self.query('set session_replication_role to default;')
 
     def create_table_pandas(self, df, tabela = 'TABLE_NAME', PK = 'id_table'):
@@ -144,7 +146,7 @@ class BD:
         print(f'Processo de criacao e insercao na tabela {tabela} concluido.')
     
     def close_bd(self):
-        return self.conn.close()
+        return self.__conn.close()
 
 def connect_bd(conf):
     path = os.path.join('.', 'conf' ,conf)

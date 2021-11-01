@@ -1,0 +1,20 @@
+create table if not exists fato_receitas(
+    codigo_receitas serial primary key,
+    codigo_orgao_superior integer,
+    codigo_orgao integer,
+    codigo_unidade_gestora integer,
+    codigo_categoria_economica integer,
+    codigo_origem_receita integer,
+    codigo_especie_receita integer,
+    data_receita date,
+    valor_previsto decimal(18,2),
+    valor_lancado decimal(18,2),
+    valor_realizado decimal(18,2),
+    constraint fk_fato_orgao_sup foreign key (codigo_orgao_superior) references orgao_superior (codigo_orgao_superior),
+    constraint fk_fato_orgao foreign key (codigo_orgao) references orgao (codigo_orgao),
+    constraint fk_fato_und foreign key (codigo_unidade_gestora) references unidade_gestora (codigo_unidade_gestora),
+    constraint fk_fato_cat foreign key (codigo_categoria_economica) references categoria_economica (codigo_categoria_economica),
+    constraint fk_fato_or foreign key (codigo_origem_receita) references origem_receita (codigo_origem_receita),
+    constraint fk_fato_er foreign key (codigo_especie_receita) references especie_receita (codigo_especie_receita),
+    constraint fk_fato_data foreign key (data_receita) references calendario (data_calendario)
+);

@@ -1,0 +1,1 @@
+call insert_unidade_gestora();
