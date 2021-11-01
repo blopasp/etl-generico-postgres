@@ -31,8 +31,16 @@ def etl_df(path, tipo_arquivo, table):
         df = open_csv_pandas(path)
         df.columns = fit_column(df)
 
-        maneger = connect_bd('connect.json')
-        maneger.insert_df_pandas(df, table)
+        try:
+            connect_bd('connect.json').insert_df_pandas(df, table)
+            print(f'Arquivo {path} inserido com sucesso')
+        except:
+            connect_bd('connect.json').create_table_pandas(df.loc[:0], table)
+            connect_bd('connect.json').insert_df_pandas(df.loc[1:], table)
+            print(f'Arquivo {path} inserido com sucesso')
+        
 
 if __name__ == '__main__':
     etl_df(r'C:\Users\012019631\Downloads\Receitas', 'csv', 'receitas_governo_federal')
+
+connect_bd('connect.json').return_tables()

@@ -1,6 +1,5 @@
 create table if not exists calendario(
-    codigo_calendario serial primary key,
-    data_calendario date,
+    data_calendario date primary key,
     dia_calendario int,
     mes_calendario int,
     ano_calendario int,

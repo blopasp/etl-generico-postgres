@@ -141,7 +141,7 @@ class BD:
         self.query(table)
         self.insert_df_pandas(df, tabela)
 
-        print(f'Processo de insercao na tabela {tabela} concluido.')
+        print(f'Processo de criacao e insercao na tabela {tabela} concluido.')
     
     def close_bd(self):
         return self.conn.close()

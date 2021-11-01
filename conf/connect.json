@@ -1,6 +1,6 @@
 {
     "host": "localhost",
-    "database": "receitas_gov",
+    "database": "gov",
     "user": "postgres",
     "pwd":"admin"
 }
