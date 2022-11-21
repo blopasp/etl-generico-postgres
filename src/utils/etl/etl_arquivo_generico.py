@@ -1,6 +1,6 @@
 import pandas as pd
 import psycopg2, sys
-from controle.bd import connect_bd
+from utils.postgresAPI.api_antigo import connect_bd
 import unicodedata
 from glob import glob
 
