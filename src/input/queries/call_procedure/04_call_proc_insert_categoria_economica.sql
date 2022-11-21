@@ -1,1 +1,0 @@
-call insert_categoria_economica();

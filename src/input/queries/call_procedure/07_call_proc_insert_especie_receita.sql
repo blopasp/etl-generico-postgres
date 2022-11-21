@@ -1,1 +1,0 @@
-call insert_especie_receita();
