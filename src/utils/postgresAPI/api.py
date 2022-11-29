@@ -11,6 +11,7 @@ class Postgres:
         self.__user = user
         
         self.__conn = self.__connect(password)
+        logging.info("Connection with Postgres Initiated")
         
     def __connect(self, password):
         return pg.connect(
@@ -102,7 +103,7 @@ class DBPostgres(Postgres):
     def upsert(self):
         pass
     
-    def all_tables_from_schema(self, schema:str):
+    def all_tables_from_schema(self, schema:str = "public"):
         return self.get_results_from_query("SELECT table_name " + 
                                       "FROM information_schema.tables " +
                                       f"WHERE table_schema = '{schema}'")
